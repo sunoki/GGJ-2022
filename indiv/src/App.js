@@ -108,7 +108,14 @@ function App() {
 
     return [numPrices, amountOfPrices];
   }  
-  
+
+  var myBoard = document.getElementsByClassName('myBoard')[0]
+
+  const showBoard = () => {
+
+     myBoard.style.visibility = 'visible';
+     window.initBoard();
+  };
   
   return (
       <div className="App">
@@ -135,7 +142,7 @@ function App() {
                 <img src={imageUrl} class="w-25 rounded-circle" />
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/myBoard">My board</a>
+                <a class="dropdown-item" onClick={showBoard} href="#">My board</a>
                 <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" onClick={logOut} href="#">Logout</a>
@@ -145,13 +152,23 @@ function App() {
           </ul>
         </div>
       </nav>
-           
+
+
+
+      <div className= "main" >
         <header className="App-header">
           {!isLoggedIn &&
             <div id="google-signin"></div>
           }
+
+          <div className="myBoard" >
+            Carrega Porra!
+            <div id="board" ></div>      
+          </div>
         </header>
+
         
+      </div>        
       </div>
   );
 }

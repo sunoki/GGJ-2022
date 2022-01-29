@@ -253,10 +253,15 @@ function generateFEN() {
 
 }
 
+$(document).ready(function(){
+  console.log('Ready disparado');
+  var setup = document.getElementById('board')
+    console.log(setup);
+});
 
-$(document).ready(function() {
-  $('#createBoard').on('click', function () {
-    var config = {
+
+function initBoard () {
+   var config = {
       draggable: true,
       sparePieces: 'white',
       dropOffBoard: 'trash',
@@ -264,29 +269,14 @@ $(document).ready(function() {
       onDrop: onDrop
     }
 
-    board = Chessboard('myBoard', config)
+    //piecesQntd = localStorage.getItem('@IndiviDUALITY/piecesQntd');
 
-    console.log("aaaaaaaaaaaaaaa");
-  });
-});
+    board = Chessboard('board', config)
+}
 
+  
 
 $('#savePos').on('click', clickSavePositionBtn)
-$('#createBoard').on('click', function () {
-  var config = {
-    draggable: true,
-    sparePieces: 'white',
-    dropOffBoard: 'trash',
-    onDragStart: onDragStart,
-    onDrop: onDrop
-  }
-
-  board = Chessboard('myBoard', config)
-
-  console.log("aaaaaaaaaaaaaaa");
-});
-
-
 $('#clrBoard').on('click', function () {
 
   board.clear(false)
