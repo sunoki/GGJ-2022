@@ -195,9 +195,13 @@ function Home() {
 
 function MyBoard() {
   return (
-    <div>
-      <h2>myBoard</h2>
+    <div id="myBoard" style="width: 400px">
+
+    <button id="savePos">Save Position</button>
+    <button id="clrBoard">Clear Board</button>
+
     </div>
+
   );
 }
 
