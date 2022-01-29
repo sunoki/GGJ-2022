@@ -519,13 +519,13 @@
   function buildContainerHTML (hasSparePieces) {
     var html = '<div class="{chessboard}">'
 
-    if (hasSparePieces) {
+    if (hasSparePieces == 'true' || hasSparePieces == 'black') {
       html += '<div class="{sparePieces} {sparePiecesTop}"></div>'
     }
 
     html += '<div class="{board}"></div>'
 
-    if (hasSparePieces) {
+    if (hasSparePieces == 'true' || hasSparePieces == 'white') {
       html += '<div class="{sparePieces} {sparePiecesBottom}"></div>'
     }
 
@@ -568,7 +568,7 @@
     if (config.dropOffBoard !== 'trash') config.dropOffBoard = 'snapback'
 
     // default for sparePieces is false
-    if (config.sparePieces !== true) config.sparePieces = false
+    if (config.sparePieces !== true & config.sparePieces !== 'white' ) config.sparePieces = false
 
     // draggable must be true if sparePieces is enabled
     if (config.sparePieces) config.draggable = true
@@ -680,6 +680,7 @@
     var squareElsIds = {}
     var squareElsOffsets = {}
     var squareSize = 16
+    var piecesQntd = [1, 0, 1, 3, 2, 4]
 
     // -------------------------------------------------------------------------
     // Validation / Errors
@@ -868,7 +869,7 @@
       return ''
     }
 
-    function buildPieceHTML (piece, hidden, id) {
+    function buildPieceHTML (piece, hidden, id, qntd) {
       var html = '<img src="' + buildPieceImgSrc(piece) + '" '
       if (isString(id) && id !== '') {
         html += 'id="' + id + '" '
@@ -883,9 +884,12 @@
       }
 
       html += '" />'
+      if (qntd != null)
+        html += qntd
 
       return interpolateTemplate(html, CSS)
     }
+
 
     function buildSparePiecesHTML (color) {
       var pieces = ['wK', 'wQ', 'wR', 'wB', 'wN', 'wP']
@@ -893,9 +897,11 @@
         pieces = ['bK', 'bQ', 'bR', 'bB', 'bN', 'bP']
       }
 
+      
+
       var html = ''
       for (var i = 0; i < pieces.length; i++) {
-        html += buildPieceHTML(pieces[i], false, sparePiecesElsIds[pieces[i]])
+        html += buildPieceHTML(pieces[i], false, sparePiecesElsIds[pieces[i]], piecesQntd[i])
       }
 
       return html
@@ -1150,6 +1156,10 @@
 
       // update state
       currentPosition = position
+    }
+
+    function setAvailablePieces (avPieces) {
+      piecesQntd = avPieces
     }
 
     function isXYOnSquare (x, y) {
@@ -1579,6 +1589,15 @@
     widget.start = function (useAnimation) {
       widget.position('start', useAnimation)
     }
+
+
+    widget.piecesAmount = function (piecesQ) {
+      
+      setAvailablePieces(piecesQ)
+      $sparePiecesBottom.html(buildSparePiecesHTML('white'))
+    }
+    
+
 
     // -------------------------------------------------------------------------
     // Browser Events
