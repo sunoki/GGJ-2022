@@ -72,23 +72,59 @@ function App() {
   
   
   return (
+
+
+
     <div className="App">
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+      <a class="navbar-brand" href="#">IndiviDUALITY Chess</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navb" class="navbar-collapse collapse hide">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Page 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Page 2</a>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav ml-auto">
+          {!isLoggedIn &&
+          <li class="nav-item"><a class="nav-link" href="#"><span class="fas fa-user"></span> Login </a></li>
+          }
+          {isLoggedIn &&
+            <li class="nav-item" onClick={logOut}>
+              <a class="nav-link" href="#">
+                <span class="fas fa-sign-in-alt"></span> 
+                  Logout 
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </nav>
+
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         {!isLoggedIn &&
           <div id="google-signin"></div>
         }
         
-        {isLoggedIn &&
+        
           <div>
             <div>
               <img src={imageUrl} />
             </div>
             <div>{name}</div>
             <div>{email}</div>
-            <button className='btn-primary' onClick={logOut}>Log Out</button>
+          
           </div>
-        }
+        
       </header>
     </div>
   );
