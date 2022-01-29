@@ -162,8 +162,7 @@ function App() {
           }
 
           <div className="myBoard" >
-            Carrega Porra!
-            <div id="board" ></div>      
+            <div id="board" style={{width : '400px'}} ></div>      
           </div>
         </header>
 
