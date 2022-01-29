@@ -72,39 +72,37 @@ function App() {
   
   
   return (
-
-
-
     <div className="App">
     <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
       <a class="navbar-brand" href="#">IndiviDUALITY Chess</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div id="navb" class="navbar-collapse collapse hide">
-        <ul class="navbar-nav">
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Page 1</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Page 2</a>
-          </li>
+          
         </ul>
 
         <ul class="nav navbar-nav ml-auto">
-          {!isLoggedIn &&
-          <li class="nav-item"><a class="nav-link" href="#"><span class="fas fa-user"></span> Login </a></li>
-          }
-          {isLoggedIn &&
-            <li class="nav-item" onClick={logOut}>
-              <a class="nav-link" href="#">
-                <span class="fas fa-sign-in-alt"></span> 
-                  Logout 
-              </a>
-            </li>
+        {isLoggedIn &&
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src={imageUrl} class="w-25 rounded-circle" />
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" onClick={logOut} href="#">Logout</a>
+            </div>
+          </li>
           }
         </ul>
       </div>
@@ -116,15 +114,7 @@ function App() {
         }
         
         
-          <div>
-            <div>
-              <img src={imageUrl} />
-            </div>
-            <div>{name}</div>
-            <div>{email}</div>
-          
-          </div>
-        
+         
       </header>
     </div>
   );
