@@ -3,14 +3,6 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { loadGoogleScript } from './lib/GoogleLogin';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-
-
 const googleClientId = "576773905852-tkb6qe5nev0b4t3dted10g3qo21fjq92.apps.googleusercontent.com";
 var amountOfPrices;
 
@@ -119,7 +111,6 @@ function App() {
   
   
   return (
-    <Router>
       <div className="App">
       <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
         <a class="navbar-brand" href="/">IndiviDUALITY Chess</a>
@@ -135,7 +126,6 @@ function App() {
             <li class="nav-item">
               <a class="nav-link" href="#">Page 1</a>
             </li>
-            
           </ul>
 
           <ul class="nav navbar-nav ml-auto">
@@ -155,25 +145,7 @@ function App() {
           </ul>
         </div>
       </nav>
-
-      <Switch>
-          <Route exact path="/">
-            {isLoggedIn &&
-            <Home />
-            }
-          </Route>
-          <Route path="/myBoard">
-            {isLoggedIn &&
-            <MyBoard />
-            }
-          </Route>
-          <Route path="/play">
-            {isLoggedIn &&
-            <Dashboard />
-            }
-          </Route>
-        </Switch>
-
+           
         <header className="App-header">
           {!isLoggedIn &&
             <div id="google-signin"></div>
@@ -181,33 +153,6 @@ function App() {
         </header>
         
       </div>
-    </Router>
-  );
-}
-
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function MyBoard() {
-  return (
-    <div>
-      <div id="myBoard"></div>
-      <button id="savePos">Save Position</button>
-      <button id="clrBoard">Clear Board</button>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div>
-      <h2>Dashboard</h2>
-    </div>
   );
 }
 
