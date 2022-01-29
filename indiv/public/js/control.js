@@ -205,14 +205,6 @@ function checkKingProtected() {
 }
 
 
-var config = {
-  draggable: true,
-  sparePieces: 'white',
-  dropOffBoard: 'trash',
-  onDragStart: onDragStart,
-  onDrop: onDrop
-}
-board = Chessboard('myBoard', config)
 
 function clickSavePositionBtn () {
   //Before we save it, let's make sure we have a king on our board
@@ -262,7 +254,38 @@ function generateFEN() {
 }
 
 
+$(document).ready(function() {
+  $('#createBoard').on('click', function () {
+    var config = {
+      draggable: true,
+      sparePieces: 'white',
+      dropOffBoard: 'trash',
+      onDragStart: onDragStart,
+      onDrop: onDrop
+    }
+
+    board = Chessboard('myBoard', config)
+
+    console.log("aaaaaaaaaaaaaaa");
+  });
+});
+
+
 $('#savePos').on('click', clickSavePositionBtn)
+$('#createBoard').on('click', function () {
+  var config = {
+    draggable: true,
+    sparePieces: 'white',
+    dropOffBoard: 'trash',
+    onDragStart: onDragStart,
+    onDrop: onDrop
+  }
+
+  board = Chessboard('myBoard', config)
+
+  console.log("aaaaaaaaaaaaaaa");
+});
+
 
 $('#clrBoard').on('click', function () {
 
