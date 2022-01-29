@@ -23,6 +23,8 @@ function App() {
     setImageUrl(profile.getImageUrl());
 
     setRamdonPieces();
+    var user = {id: profile.getId(), name: profile.getName(), email: profile.getEmail() };
+    localStorage.setItem('@IndiviDUALITY/user', user);
   };
   
   const onFailure = () => {
