@@ -135,22 +135,28 @@ function countPieces(pos) {
 //Player can only drop on the bottom half, and the king only on the 2 first ranks
 function onDrop (source, target, piece, newPos, oldPos) {
   // we should put pieces only in our half of the board
-  rank = target.substring(1)
-  file = convertFileToInt(target.substring(0,1))
-  droppedPiece = piece.substring(1)
-  // King can only be placed up to the second rank, other pieces up to the fourth
-  if (king) {
-    king = false
-    if (rank > 2) return 'snapback'
-    else {
-      kingFile = file
-      kingRank = rank-1
-    }   
-  } else {
-    if (rank > 4) return 'snapback'  
+  console.log(target)
+  if (target != "offboard") {
+    rank = target.substring(1)
+    file = convertFileToInt(target.substring(0,1))
+
+    
+    droppedPiece = piece.substring(1)
+    // King can only be placed up to the second rank, other pieces up to the fourth
+    if (king) {
+      king = false
+      if (rank > 2) return 'snapback'
+      else {
+        kingFile = file
+        kingRank = rank-1
+      }   
+    } else {
+      if (rank > 4) return 'snapback'  
+    }
+    
+    boardMatrix[rank-1][file] = droppedPiece
+
   }
-  
-  boardMatrix[rank-1][file] = droppedPiece
   var newFen = Chessboard.objToFen(newPos)
   countPieces(newFen)
   board.piecesAmount(piecesAvailable)
