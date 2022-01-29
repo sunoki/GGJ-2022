@@ -6,7 +6,7 @@
 <button id="clrBoard">Clear Board</button>
 
 <script src="js/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
+<link rel="stylesheet" href="css/chessboard-1.0.0.css">
 <script src="js/chessboard-1.0.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js" integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" crossorigin="anonymous"></script>
 <script>
@@ -29,8 +29,8 @@ var kingRank = -1
 var kingFile = -1
 
 //Initial amounts available for each piece. This will be replaced by the actual amount of pieces, the player has
-var piecesQntd = [1, 0, 1, 3, 2, 4]
-var piecesAvailable = [1, 0, 1, 3, 2, 4]
+var piecesQntd = [1, 0, 2, 3, 2, 4]
+var piecesAvailable = [1, 0, 2, 3, 2, 4]
 
 //This is the beginning of the Drag. We want to make sure player can drag the piece player is trying to
 //Player cannot drag a piece not available nor more than 16 pieces
@@ -45,6 +45,14 @@ function onDragStart (source, piece, position, orientation) {
     king = true
   } else {
     king = false
+  }
+
+  //Let's take this piece out of the matrix if we are taking from the board
+  if (source != "spare") {
+    rank = source.substring(1)
+    file = convertFileToInt(source.substring(0,1))
+
+    boardMatrix[rank-1][file] = 0
   }
 
   //If piece is already on the board, player can drag it anytime
@@ -185,18 +193,26 @@ function convertFileToInt(file) {
 //To avoid a initial position in check, we want to make sure king is protected
 function checkKingProtected() {
   console.log(kingFile + " - " + kingRank)
+  console.log(boardMatrix)
 
-  if (boardMatrix[kingRank+1][kingFile] == 0) {
+  if (boardMatrix[kingRank+1][kingFile] == 0 & boardMatrix[kingRank+2][kingFile] == 0 & boardMatrix[kingRank+3][kingFile] == 0) {
+    console.log("pra frente")
     return false
   }
-  if (kingFile > 0) {
-    if (boardMatrix[kingRank+1][kingFile-1] == 0)
-      return false
-  }
-  if (kingFile < 7) {
-    if (boardMatrix[kingRank+1][kingFile+1] == 0)
+
+  if (kingFile <= 3) {
+    if (boardMatrix[kingRank+1][kingFile+1] == 0 & boardMatrix[kingRank+2][kingFile+2] == 0 & boardMatrix[kingRank+3][kingFile+3] == 0) {
+      console.log("pra mais")
       return false    
-  } 
+    }
+  }
+
+  if (kingFile >= 4) {
+    if (boardMatrix[kingRank+1][kingFile-1] == 0 & boardMatrix[kingRank+2][kingFile-2] == 0 & boardMatrix[kingRank+3][kingFile-3] == 0) {
+      console.log("pra menos")
+      return false
+    }    
+  }
 
   return true
 }
@@ -214,21 +230,48 @@ board = Chessboard('myBoard', config)
 function clickSavePositionBtn () {
   //Before we save it, let's make sure we have a king on our board
   console.log('Current position as a FEN string:')
-  console.log(board.fen())
-  var endBoard = board.fen()
+  var endBoard = generateFEN()
   var king = "K"
 
   //This needs to become a message on the page, not on the console
-  if (endBoard.indexOf(king) !== -1)
+  if (endBoard.indexOf(king) !== -1) {
+    //document.getElementById("errorMessage").innerHTML = "Saved Successfully";
     console.log(endBoard)
-  else
+  }
+  else {
     console.log('Missing King')
+    document.getElementById("errorMessage").innerHTML = "Missing King";
+    return
+  }
 
   if (checkKingProtected()) {
-    console.log("protected")
+    document.getElementById("errorMessage").innerHTML = "Saved Successfully. Your FEN is: " + endBoard;
+    document. getElementById("protectedImage"). style. visibility = "hidden";
   } else {
-    console.log("unprotected")
+    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:";
+    document. getElementById("protectedImage"). style. visibility = "visible";
+    return
   }
+}
+
+function generateFEN() {
+  console.log(board.fen())
+  var endBoard = board.fen()
+  endBoard += " w "
+
+  //We can only Castle if King is in e1
+  if (boardMatrix[0][4] == "K") {
+    //If rookie is on File h, we can castle small
+    if (boardMatrix[0][7] == "R") {
+      endBoard += "K"  
+    }
+    //If rookie is on File a, we can castle big
+    if (boardMatrix[0][0] == "R") {
+      endBoard += "Q"
+    }
+  }
+  return endBoard
+
 }
 
 $('#savePos').on('click', clickSavePositionBtn)
@@ -243,6 +286,9 @@ $('#clrBoard').on('click', function () {
 })
 
 </script>
+
+<p id="errorMessage"></p>
+<img id="protectedImage" src="protected.gif">
 
 </body>
 </html>
