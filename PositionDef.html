@@ -6,7 +6,7 @@
 <button id="clrBoard">Clear Board</button>
 
 <script src="js/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
+<link rel="stylesheet" href="css/chessboard-1.0.0.css">
 <script src="js/chessboard-1.0.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js" integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" crossorigin="anonymous"></script>
 <script>
@@ -45,6 +45,14 @@ function onDragStart (source, piece, position, orientation) {
     king = true
   } else {
     king = false
+  }
+
+  //Let's take this piece out of the matrix if we are taking from the board
+  if (source != "spare") {
+    rank = source.substring(1)
+    file = convertFileToInt(source.substring(0,1))
+
+    boardMatrix[rank-1][file] = 0
   }
 
   //If piece is already on the board, player can drag it anytime
@@ -185,18 +193,26 @@ function convertFileToInt(file) {
 //To avoid a initial position in check, we want to make sure king is protected
 function checkKingProtected() {
   console.log(kingFile + " - " + kingRank)
+  console.log(boardMatrix)
 
-  if (boardMatrix[kingRank+1][kingFile] == 0) {
+  if (boardMatrix[kingRank+1][kingFile] == 0 & boardMatrix[kingRank+2][kingFile] == 0 & boardMatrix[kingRank+3][kingFile] == 0) {
+    console.log("pra frente")
     return false
   }
-  if (kingFile > 0) {
-    if (boardMatrix[kingRank+1][kingFile-1] == 0)
-      return false
-  }
-  if (kingFile < 7) {
-    if (boardMatrix[kingRank+1][kingFile+1] == 0)
+
+  if (kingFile <= 3) {
+    if (boardMatrix[kingRank+1][kingFile+1] == 0 & boardMatrix[kingRank+2][kingFile+2] == 0 & boardMatrix[kingRank+3][kingFile+3] == 0) {
+      console.log("pra mais")
       return false    
-  } 
+    }
+  }
+
+  if (kingFile >= 4) {
+    if (boardMatrix[kingRank+1][kingFile-1] == 0 & boardMatrix[kingRank+2][kingFile-2] == 0 & boardMatrix[kingRank+3][kingFile-3] == 0) {
+      console.log("pra menos")
+      return false
+    }    
+  }
 
   return true
 }
@@ -219,15 +235,23 @@ function clickSavePositionBtn () {
   var king = "K"
 
   //This needs to become a message on the page, not on the console
-  if (endBoard.indexOf(king) !== -1)
+  if (endBoard.indexOf(king) !== -1) {
+    //document.getElementById("errorMessage").innerHTML = "Saved Successfully";
     console.log(endBoard)
-  else
+  }
+  else {
     console.log('Missing King')
+    document.getElementById("errorMessage").innerHTML = "Missing King";
+    return
+  }
 
   if (checkKingProtected()) {
-    console.log("protected")
+    document.getElementById("errorMessage").innerHTML = "Saved Successfully";
+    document. getElementById("protectedImage"). style. visibility = "hidden";
   } else {
-    console.log("unprotected")
+    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:";
+    document. getElementById("protectedImage"). style. visibility = "visible";
+    return
   }
 }
 
@@ -243,6 +267,9 @@ $('#clrBoard').on('click', function () {
 })
 
 </script>
+
+<p id="errorMessage"></p>
+<img id="protectedImage" src="protected.gif">
 
 </body>
 </html>
