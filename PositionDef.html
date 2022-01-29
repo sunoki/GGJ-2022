@@ -29,8 +29,8 @@ var kingRank = -1
 var kingFile = -1
 
 //Initial amounts available for each piece. This will be replaced by the actual amount of pieces, the player has
-var piecesQntd = [1, 0, 1, 3, 2, 4]
-var piecesAvailable = [1, 0, 1, 3, 2, 4]
+var piecesQntd = [1, 0, 2, 3, 2, 4]
+var piecesAvailable = [1, 0, 2, 3, 2, 4]
 
 //This is the beginning of the Drag. We want to make sure player can drag the piece player is trying to
 //Player cannot drag a piece not available nor more than 16 pieces
@@ -230,8 +230,7 @@ board = Chessboard('myBoard', config)
 function clickSavePositionBtn () {
   //Before we save it, let's make sure we have a king on our board
   console.log('Current position as a FEN string:')
-  console.log(board.fen())
-  var endBoard = board.fen()
+  var endBoard = generateFEN()
   var king = "K"
 
   //This needs to become a message on the page, not on the console
@@ -246,13 +245,33 @@ function clickSavePositionBtn () {
   }
 
   if (checkKingProtected()) {
-    document.getElementById("errorMessage").innerHTML = "Saved Successfully";
+    document.getElementById("errorMessage").innerHTML = "Saved Successfully. Your FEN is: " + endBoard;
     document. getElementById("protectedImage"). style. visibility = "hidden";
   } else {
     document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:";
     document. getElementById("protectedImage"). style. visibility = "visible";
     return
   }
+}
+
+function generateFEN() {
+  console.log(board.fen())
+  var endBoard = board.fen()
+  endBoard += " w "
+
+  //We can only Castle if King is in e1
+  if (boardMatrix[0][4] == "K") {
+    //If rookie is on File h, we can castle small
+    if (boardMatrix[0][7] == "R") {
+      endBoard += "K"  
+    }
+    //If rookie is on File a, we can castle big
+    if (boardMatrix[0][0] == "R") {
+      endBoard += "Q"
+    }
+  }
+  return endBoard
+
 }
 
 $('#savePos').on('click', clickSavePositionBtn)
