@@ -4,22 +4,24 @@ function init() {
 
 	if (playerPieces != null) {
 		console.log("dentro do if")
-		document.getElementById("btnPeople").disabled = true
-		document.getElementById("btnReligion").disabled = true
-		document.getElementById("btnChivalry").disabled = true
-		document.getElementById("btnCastle").disabled = true
+		disablePackageButtons()
 	} else {
 		document.getElementById("newPiece").innerHTML = playerPieces
 	} 
 }
 
+function disablePackageButtons() {
+	console.log("disablePackageButtons")
+	document.getElementById("btnPeople").disabled = "true"
+	document.getElementById("btnReligion").setAttribute("disabled", "disabled");
+	//document.querySelectorAll("input[id=btnChivalry]"); element[0].setAttribute("disabled",true);
+	document.getElementById("btnCastle").disabled = "true"
+}
+
 function clickPeople() {
 	var piecesQntd = [1,0,0,0,0,9]
     localStorage.setItem('@IndiviDUALITY/piecesQntd', piecesQntd);
-    document.getElementById("btnPeople").disabled = true
-	document.getElementById("btnReligion").disabled = true
-	document.getElementById("btnChivalry").disabled = true
-	document.getElementById("btnCastle").disabled = true
+	 disablePackageButtons()
 
 	document.getElementById("newPiece").innerHTML = piecesQntd
 }
@@ -27,10 +29,7 @@ function clickPeople() {
 function clickReligion() {
 	var piecesQntd = [1,0,0,2,0,3]
     localStorage.setItem('@IndiviDUALITY/piecesQntd', piecesQntd);
-    document.getElementById("btnPeople").disabled = true
-	document.getElementById("btnReligion").disabled = true
-	document.getElementById("btnChivalry").disabled = true
-	document.getElementById("btnCastle").disabled = true
+		disablePackageButtons()
 
 	document.getElementById("newPiece").innerHTML = piecesQntd
 }
@@ -38,10 +37,7 @@ function clickReligion() {
 function clickChivalry() {
 	var piecesQntd = [1,0,0,0,2,3]
     localStorage.setItem('@IndiviDUALITY/piecesQntd', piecesQntd);
-    document.getElementById("btnPeople").disabled = true
-	document.getElementById("btnReligion").disabled = true
-	document.getElementById("btnChivalry").disabled = true
-	document.getElementById("btnCastle").disabled = true
+	disablePackageButtons()
 
 	document.getElementById("newPiece").innerHTML = piecesQntd
 }
@@ -49,10 +45,7 @@ function clickChivalry() {
 function clickCastle() {
 	var piecesQntd = [1,0,1,0,0,4]
     localStorage.setItem('@IndiviDUALITY/piecesQntd', piecesQntd);
-    document.getElementById("btnPeople").disabled = true
-	document.getElementById("btnReligion").disabled = true
-	document.getElementById("btnChivalry").disabled = true
-	document.getElementById("btnCastle").disabled = true
+	disablePackageButtons()
 
 	document.getElementById("newPiece").innerHTML = piecesQntd
 }
@@ -125,7 +118,7 @@ function clickRandom() {
 			localStorage.setItem('@IndiviDUALITY/piecesQntd', piecesQntd);
 		}
 	 }
-
+	 disablePackageButtons()
 	 document.getElementById("newPiece").innerHTML = "You get a " + piece + " - " + piecesQntd
 }
 

@@ -30,6 +30,16 @@ $('#btnChivalry').on('click', clickChivalry)
 $('#btnCastle').on('click', clickCastle)
 $('#btnRandom').on('click', clickRandom)
 
+var playerPieces = localStorage.getItem('@IndiviDUALITY/piecesQntd');
+
+if (playerPieces != null) {
+	console.log("dentro do if")
+	document.getElementById("btnPeople").disabled = true
+	document.getElementById("btnReligion").disabled = true
+	document.getElementById("btnChivalry").disabled = true
+	document.getElementById("btnCastle").disabled = true
+}
+
 function init() {
 	console.log("init")
 	var playerPieces = localStorage.getItem('@IndiviDUALITY/piecesQntd');

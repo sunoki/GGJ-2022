@@ -37,4 +37,27 @@
   }
 }
 
+#btnPeople {
+   background-image: url('./img/people.png');
+    background-size: 100% 100%;   
+}
 
+#btnCastle {
+   background-image: url('./img/castle.png');
+    background-size: 100% 100%;
+   
+}
+
+#btnChivalry {
+   background-image: url('./img/chivalry.png');
+    background-size: 100% 100%;   
+}
+
+#btnReligion {
+   background-image: url('./img/religion.png');
+    background-size: 100% 100%;     
+}
+.disabled {
+  opacity: 0.1;
+  cursor: not-allowed;
+}

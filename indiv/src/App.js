@@ -126,7 +126,8 @@ function App() {
 
      packagePiece.style.visibility = 'visible';
      myBoard.style.visibility = 'hidden';
-     window.initBoard();
+     //window.initBoard();
+     window.init();
   };
   
   
@@ -188,10 +189,10 @@ function App() {
 
           <div className="package" style={{visibility : 'hidden'}}>
             <h2>Choose your initial army package</h2>
-            <button id="btnPeople"   onClick={window.clickPeople}><img src="/img/people.png"></img></button>
-            <button id="btnReligion" onClick={window.clickReligion}><img src="/img/religion.png"></img></button>
-            <button id="btnChivalry" onClick={window.clickChivalry}><img src="/img/chivalry.png"></img></button>
-            <button id="btnCastle"   onClick={window.clickCastle}><img src="/img/castle.png"></img></button>
+            <button id="btnPeople" onClick={window.clickPeople}>People</button>
+            <button id="btnReligion" onClick={window.clickReligion}>Religion</button>
+            <button id="btnChivalry" onClick={window.clickChivalry}>Chivalry</button>
+            <button id="btnCastle"   onClick={window.clickCastle}>Castle</button>
 
             <p></p>
 
