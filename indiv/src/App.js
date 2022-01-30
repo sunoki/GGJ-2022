@@ -48,7 +48,7 @@ function App() {
     setEmail(profile.getEmail());
     setImageUrl(profile.getImageUrl());
 
-    setRamdonPieces();
+    // setRamdonPieces();
     var user = {id: profile.getId(), name: profile.getName(), email: profile.getEmail() };
     localStorage.setItem('@IndiviDUALITY/user', user);
   };
