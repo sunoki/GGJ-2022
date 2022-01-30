@@ -101,26 +101,34 @@ function App() {
 
 
   function generatePrices(amountOfPrices) {
-    console.log("Init - amountOfPrices: " + amountOfPrices);
+    //console.log("Init - amountOfPrices: " + amountOfPrices);
     var numPrices = generateRandomIntegerInRange(0, amountOfPrices);
 
-    console.log("Price:" + numPrices);
+    //console.log("Price:" + numPrices);
 
-     amountOfPrices = amountOfPrices - numPrices;
-    console.log("Final - amountOfPrices: " + amountOfPrices);
+    amountOfPrices = amountOfPrices - numPrices;
+    //console.log("Final - amountOfPrices: " + amountOfPrices);
 
     return [numPrices, amountOfPrices];
   }  
 
   var myBoard = document.getElementsByClassName('myBoard')[0]
+  var packagePiece = document.getElementsByClassName('package')[0]
 
   const showBoard = () => {
 
      myBoard.style.visibility = 'visible';
+     packagePiece.style.visibility = 'hidden';
      window.initBoard();
   };
 
+  const showPackage = () => {
 
+     packagePiece.style.visibility = 'visible';
+     myBoard.style.visibility = 'hidden';
+     window.initBoard();
+  };
+  
   
   return (
       <div className="App">
@@ -148,7 +156,7 @@ function App() {
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" onClick={showBoard} href="#">My board</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" onClick={showPackage} href="#">Create Package</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" onClick={logOut} href="#">Logout</a>
               </div>
@@ -166,16 +174,34 @@ function App() {
             <div id="google-signin"></div>
           }
 
-          <div className="myBoard" >
+          <div className="myBoard" style={{visibility : 'hidden'}}>
             <div id="board" style={{width : '400px'}} ></div>  
             <div style={{width : '400px'}}>  
-              <button id="savePos" onClick={window.clickSavePositionBtn} style={{visibility : 'hidden'}}>Save Position</button>
-              <button id="clrBoard" onClick={window.clickClearBoard} style={{visibility : 'hidden'}}>Clear Board</button> 
+              <button id="savePos" onClick={window.clickSavePositionBtn} >Save Position</button>
+              <button id="clrBoard" onClick={window.clickClearBoard} >Clear Board</button> 
             </div>
             <div style={{width : '400px'}}>
               <p id="errorMessage"></p>
               <img id="protectedImage" src={imgProtected}></img>
             </div>
+          </div>
+
+          <div className="package" style={{visibility : 'hidden'}}>
+            <h2>Choose your initial army package</h2>
+            <button id="btnPeople"   onClick={window.clickPeople}><img src="/img/people.png"></img></button>
+            <button id="btnReligion" onClick={window.clickReligion}><img src="/img/religion.png"></img></button>
+            <button id="btnChivalry" onClick={window.clickChivalry}><img src="/img/chivalry.png"></img></button>
+            <button id="btnCastle"   onClick={window.clickCastle}><img src="/img/castle.png"></img></button>
+
+            <p></p>
+
+            <h3>Expand your army</h3>
+            <button id="btnRandom" onClick={window.clickRandom}><img src="/img/random.png"></img></button>
+            <p id="newPiece"></p>
+
+            <p></p>
+
+            <button id="btnInit" onClick={window.init}>Init</button>
           </div>
         </header>
 

@@ -255,13 +255,6 @@ function generateFEN() {
 
 }
 
-$(document).ready(function(){
-  console.log('Ready disparado');
-  var setup = document.getElementById('board')
-    console.log(setup);
-});
-
-
 function initBoard () {
    var config = {
       draggable: true,
@@ -274,7 +267,9 @@ function initBoard () {
     console.log("initBoard")
     var piecesQntdStr = localStorage.getItem('@IndiviDUALITY/piecesQntd');
     piecesAvailable= piecesQntdStr.split(",").map(Number)
-    board = Chessboard('board', config)
+    if( board == null) {
+      board = Chessboard('board', config)      
+    }
 
     boardMatrix = [[0, 0, 0, 0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0, 0, 0, 0],
@@ -287,8 +282,6 @@ function initBoard () {
 
     document.getElementById("errorMessage").innerHTML = ""
     document. getElementById("protectedImage"). style. visibility = "hidden"
-    document. getElementById("savePos"). style. visibility = "visible"
-    document. getElementById("clrBoard"). style. visibility = "visible"
     board.piecesAmount(piecesAvailable)
 }
 
