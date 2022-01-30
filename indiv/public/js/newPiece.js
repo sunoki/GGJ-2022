@@ -13,8 +13,8 @@ function init() {
 function disablePackageButtons() {
 	console.log("disablePackageButtons")
 	document.getElementById("btnPeople").disabled = "true"
-	document.getElementById("btnReligion").setAttribute("disabled", "disabled");
-	//document.querySelectorAll("input[id=btnChivalry]"); element[0].setAttribute("disabled",true);
+	document.getElementById("btnReligion").disabled = "true"
+	document.getElementById("btnChivalry").disabled = "true"
 	document.getElementById("btnCastle").disabled = "true"
 }
 

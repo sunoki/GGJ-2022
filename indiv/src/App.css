@@ -39,25 +39,34 @@
 
 #btnPeople {
    background-image: url('./img/people.png');
-    background-size: 100% 100%;   
+    background-size: 100% 100%; 
+    height: 196px;  
+    width: 196px;  
+    
 }
+
 
 #btnCastle {
    background-image: url('./img/castle.png');
     background-size: 100% 100%;
-   
+    height: 196px;  
+    width: 196px;     
 }
 
 #btnChivalry {
    background-image: url('./img/chivalry.png');
     background-size: 100% 100%;   
+    height: 196px;  
+    width: 196px;  
 }
 
 #btnReligion {
    background-image: url('./img/religion.png');
     background-size: 100% 100%;     
+    height: 196px;  
+    width: 196px;  
 }
-.disabled {
-  opacity: 0.1;
-  cursor: not-allowed;
+
+.img {
+  border-radius: 16px;
 }
