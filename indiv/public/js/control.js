@@ -247,7 +247,7 @@ function generateFEN() {
     }
   }
 
-
+  endBoard += castle
 
   localStorage.setItem('@IndiviDUALITY/Castle', castle)
 
@@ -287,6 +287,8 @@ function initBoard () {
 
     document.getElementById("errorMessage").innerHTML = ""
     document. getElementById("protectedImage"). style. visibility = "hidden"
+    document. getElementById("savePos"). style. visibility = "visible"
+    document. getElementById("clrBoard"). style. visibility = "visible"
     board.piecesAmount(piecesAvailable)
 }
 

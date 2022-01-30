@@ -169,8 +169,8 @@ function App() {
           <div className="myBoard" >
             <div id="board" style={{width : '400px'}} ></div>  
             <div style={{width : '400px'}}>  
-              <button id="savePos" onClick={window.clickSavePositionBtn}>Save Position</button>
-              <button id="clrBoard" onClick={window.clickClearBoard}>Clear Board</button> 
+              <button id="savePos" onClick={window.clickSavePositionBtn} style={{visibility : 'hidden'}}>Save Position</button>
+              <button id="clrBoard" onClick={window.clickClearBoard} style={{visibility : 'hidden'}}>Clear Board</button> 
             </div>
             <div style={{width : '400px'}}>
               <p id="errorMessage"></p>
