@@ -36,9 +36,9 @@ for (let i = 0; i < 100; i++) {
 io.on('connection', function (socket) {
     // console.log(players);
     var color;
-    var playerId =  Math.floor((Math.random() * 100) + 1)
-    var fen = '8/8/8/8/8/8/3BBN2/R3K2R'
-    var castle = 'KQ'
+    var playerId;
+    var fen;
+    var castle;
 
     console.log(playerId + ' connected');
 
@@ -60,7 +60,8 @@ io.on('connection', function (socket) {
         if (players % 2 == 0) color = 'black';
         else color = 'white';
 
-        socket.emit('player', { playerId, players, color, fen, castle, roomId })
+        // socket.emit('player', { playerId, players, color, fen, castle, roomId })
+        socket.emit('player', {players, color, roomId })
         // players--;
 
         

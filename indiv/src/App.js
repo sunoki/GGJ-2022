@@ -139,20 +139,29 @@ function App() {
 
   var myBoard = document.getElementsByClassName('myBoard')[0]
   var packagePiece = document.getElementsByClassName('package')[0]
+  var jogarContainer = document.getElementsByClassName('containerjogar')[0]
 
   const showBoard = () => {
-
-     myBoard.style.visibility = 'visible';
-     packagePiece.style.visibility = 'hidden';
+     myBoard.style.display = 'block';
+     packagePiece.style.display = 'none';
+     jogarContainer.style.display = 'none';
      window.initBoard();
   };
 
   const showPackage = () => {
-
-     packagePiece.style.visibility = 'visible';
-     myBoard.style.visibility = 'hidden';
+     packagePiece.style.display = 'block';
+     myBoard.style.display = 'none';
+     jogarContainer.style.display = 'none';
      //window.initBoard();
      window.init();
+  };
+
+  const showJogar = () => {
+     packagePiece.style.display = 'none';
+     myBoard.style.display = 'none';
+     jogarContainer.style.display = 'block';
+     //window.initBoard();
+  //    // window.init();
   };
   
   // Online socketio
@@ -223,8 +232,8 @@ function App() {
             var startFen;
             if(players == 2){
                 var roomNum = msg.roomId;
-                var fen = msg.fen;
-                var castle = msg.castle;
+                var fen = localStorage.getItem('@IndiviDUALITY/FEN');
+                var castle = localStorage.getItem('@IndiviDUALITY/Castle');
 
                 socket.emit('firstMove', { roomNum, fen , castle , color });
                 document.getElementById('stateroom').innerHTML = "Game in Progress";
@@ -234,8 +243,8 @@ function App() {
                 document.getElementById('stateroom').innerHTML = "Waiting for Second player";
             }
 
-            p1fen = msg.fen;
-            p1castle = msg.castle;
+            p1fen = localStorage.getItem('@IndiviDUALITY/FEN');
+            p1castle = localStorage.getItem('@IndiviDUALITY/Castle');
 
             var cfg = {
                 orientation: color,
@@ -247,7 +256,7 @@ function App() {
                 onMouseoverSquare: onMouseoverSquare,
                 onSnapEnd: onSnapEnd
             };
-            board = window.ChessBoard('board', cfg);
+            board = window.ChessBoard('boardJogo', cfg);
         });
     }, []);
 
@@ -395,33 +404,33 @@ function App() {
 
   return (
       <div className="App">
-      <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
-        <a class="navbar-brand" href="/">IndiviDUALITY Chess</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+      <nav className="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+        <a className="navbar-brand" href="/">IndiviDUALITY Chess</a>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/play">Jogar <span class="sr-only">(current)</span></a>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <a className="nav-link" onClick={showJogar} href="#">Jogar <span className="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page 1</a>
+            <li className="nav-item">
+              <a className="nav-link" href="#">Page 1</a>
             </li>
           </ul>
 
-          <ul class="nav navbar-nav ml-auto">
+          <ul className="nav navbar-nav ml-auto">
           {isLoggedIn &&
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src={imageUrl} class="w-25 rounded-circle" />
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src={imageUrl} className="w-25 rounded-circle" />
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" onClick={showBoard} href="#">My board</a>
-                <a class="dropdown-item" onClick={showPackage} href="#">Create Package</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onClick={logOut} href="#">Logout</a>
+              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a className="dropdown-item" onClick={showBoard} href="#">My board</a>
+                <a className="dropdown-item" onClick={showPackage} href="#">Create Package</a>
+                <div className="dropdown-divider"></div>
+                <a className="dropdown-item" onClick={logOut} href="#">Logout</a>
               </div>
             </li>
             }
@@ -436,27 +445,28 @@ function App() {
           {!isLoggedIn &&
             <div id="google-signin"></div>
           }
-          <div className="containerjogar">
-          <div id="board" style={{width: '500px', margin: 'auto'}}></div>
-          <div style={{margin: 'auto'}}>
-            <div id="player"></div>
-            <div id="roomnumbers">Enter a room number between 0 and 99</div>
-            <form>
-              <div className="row">
-                <div className="col">
-                  <input type="number" id="room" min="0" max="99" 
-                className="form-control form-control-md number"></input>
+          {isLoggedIn &&
+            <div className="containerjogar" style={{display : 'none'}}>
+            <div id="boardJogo" style={{width: '500px', margin: 'auto'}}></div>
+            <div style={{margin: 'auto'}}>
+              <div id="player"></div>
+              <div id="roomnumbers">Enter a room number between 0 and 99</div>
+              <form>
+                <div className="row">
+                  <div className="col">
+                    <input type="number" id="room" min="0" max="99" 
+                  className="form-control form-control-md number"></input>
+                  </div>
+                  <div className="col">
+                    <button id="buttonplay" className="btn btn-success" onClick={connect}>Connect</button>
+                  </div>
                 </div>
-                <div className="col">
-                  <button id="buttonplay" className="btn btn-success" onClick={connect}>Connect</button>
-                </div>
-              </div>
-            </form>
-            <div id="stateroom">Join Game</div>
-          </div>
-
-        </div>
-          <div className="myBoard" style={{visibility : 'hidden'}}>
+              </form>
+              <div id="stateroom">Join Game</div>
+            </div>
+            </div>
+          }
+          <div className="myBoard" style={{display : 'none'}}>
             <div id="board" style={{width : '400px'}} ></div>  
             <div style={{width : '400px'}}>  
               <button id="savePos" onClick={window.clickSavePositionBtn} >Save Position</button>
@@ -468,7 +478,7 @@ function App() {
             </div>
           </div>
 
-          <div className="package" style={{visibility : 'hidden'}}>
+          <div className="package" style={{display : 'none'}}>
             <h2>Choose your initial army package</h2>
             <button id="btnPeople" onClick={window.clickPeople}>People</button>
             <button id="btnReligion" onClick={window.clickReligion}>Religion</button>
