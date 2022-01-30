@@ -680,7 +680,7 @@
     var squareElsIds = {}
     var squareElsOffsets = {}
     var squareSize = 16
-    var piecesQntd = [1, 0, 1, 3, 2, 4]
+    var piecesQntd = [0,0,0,0,0,0]
 
     // -------------------------------------------------------------------------
     // Validation / Errors
@@ -1578,7 +1578,7 @@
       if (config.sparePieces) {
         $container
           .find('.' + CSS.sparePieces)
-          .css('paddingLeft', squareSize + boardBorderSize + 'px')
+          .css('paddingLeft', 1 + 'px')
       }
 
       // redraw the board

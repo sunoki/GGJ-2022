@@ -53,4 +53,11 @@
   left: 2px;
 }
 
-#protectedImage { visibility: hidden; }
+#errorMessage {
+  cursor: default;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  position: absolute;
+}
+
+#protectedImage { visibility: hidden; width: 50%; }

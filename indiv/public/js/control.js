@@ -16,7 +16,6 @@ var kingRank = -1
 var kingFile = -1
 
 //Initial amounts available for each piece. This will be replaced by the actual amount of pieces, the player has
-var piecesQntd = null
 var piecesAvailable = null
 
 //This is the beginning of the Drag. We want to make sure player can drag the piece player is trying to
@@ -122,8 +121,6 @@ if (piece == "P")
 //Player can only drop on the bottom half, and the king only on the 2 first ranks
 function onDrop (source, target, piece, newPos, oldPos) {
   // we should put pieces only in our half of the board
-  console.log(target)
-  console.log(piece)
   if (target != "offboard") {
     var rank = target.substring(1)
     var file = convertFileToInt(target.substring(0,1))
@@ -148,8 +145,6 @@ function onDrop (source, target, piece, newPos, oldPos) {
     boardMatrix[rank-1][file] = droppedPiece
 
   }
-  var newFen = Chessboard.objToFen(newPos)
-  console.log(newFen)
 
   if (source == "spare" & target != "offboard")
     countPieces(-1, piece.substring(1))
@@ -228,7 +223,7 @@ function clickSavePositionBtn () {
     
     document. getElementById("protectedImage"). style. visibility = "hidden"
   } else {
-    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when he cannot be checked in anycase on the initial oposition. Ie. when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:"
+    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when he cannot be checked on the initial oposition by enemies forces. See examples below:"
     document. getElementById("protectedImage"). style. visibility = "visible"
     return
   }
@@ -278,23 +273,41 @@ function initBoard () {
 
     console.log("initBoard")
     var piecesQntdStr = localStorage.getItem('@IndiviDUALITY/piecesQntd');
-    piecesQntd = piecesQntdStr.split(",").map(Number)
-    console.log(piecesQntd)
-    piecesAvailable = piecesQntd
-    console.log(piecesAvailable)
+    piecesAvailable= piecesQntdStr.split(",").map(Number)
     board = Chessboard('board', config)
 
+    boardMatrix = [[0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 0, 0]]
+
+    document.getElementById("errorMessage").innerHTML = ""
+    document. getElementById("protectedImage"). style. visibility = "hidden"
     board.piecesAmount(piecesAvailable)
 }
 
-  
-
-$('#savePos').on('click', clickSavePositionBtn)
-$('#clrBoard').on('click', function () {
-
+function clickClearBoard () {
   board.clear(false)
 
-  var newFen = board.fen()
-  countPieces(newFen)
+  boardMatrix = [[0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0]]
+
+  var piecesQntdStr = localStorage.getItem('@IndiviDUALITY/piecesQntd');
+  piecesAvailable= piecesQntdStr.split(",").map(Number)
   board.piecesAmount(piecesAvailable)
-}) 
+
+  document.getElementById("errorMessage").innerHTML = ""
+  document. getElementById("protectedImage"). style. visibility = "hidden"
+
+}
+ 

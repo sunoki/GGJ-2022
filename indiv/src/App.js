@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
 import { loadGoogleScript } from './lib/GoogleLogin';
+import imgProtected from './protected.gif'
 
 const googleClientId = "576773905852-tkb6qe5nev0b4t3dted10g3qo21fjq92.apps.googleusercontent.com";
 var amountOfPrices;
@@ -118,6 +119,8 @@ function App() {
      myBoard.style.visibility = 'visible';
      window.initBoard();
   };
+
+
   
   return (
       <div className="App">
@@ -164,7 +167,15 @@ function App() {
           }
 
           <div className="myBoard" >
-            <div id="board" style={{width : '400px'}} ></div>      
+            <div id="board" style={{width : '400px'}} ></div>  
+            <div style={{width : '400px'}}>  
+              <button id="savePos" onClick={window.clickSavePositionBtn}>Save Position</button>
+              <button id="clrBoard" onClick={window.clickClearBoard}>Clear Board</button> 
+            </div>
+            <div style={{width : '400px'}}>
+              <p id="errorMessage"></p>
+              <img id="protectedImage" src={imgProtected}></img>
+            </div>
           </div>
         </header>
 
