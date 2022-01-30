@@ -192,24 +192,18 @@ function convertFileToInt(file) {
 }
 //To avoid a initial position in check, we want to make sure king is protected
 function checkKingProtected() {
-  console.log(kingFile + " - " + kingRank)
-  console.log(boardMatrix)
-
   if (boardMatrix[kingRank+1][kingFile] == 0 & boardMatrix[kingRank+2][kingFile] == 0 & boardMatrix[kingRank+3][kingFile] == 0) {
-    console.log("pra frente")
     return false
   }
 
   if (kingFile <= 3) {
     if (boardMatrix[kingRank+1][kingFile+1] == 0 & boardMatrix[kingRank+2][kingFile+2] == 0 & boardMatrix[kingRank+3][kingFile+3] == 0) {
-      console.log("pra mais")
       return false    
     }
   }
 
   if (kingFile >= 4) {
     if (boardMatrix[kingRank+1][kingFile-1] == 0 & boardMatrix[kingRank+2][kingFile-2] == 0 & boardMatrix[kingRank+3][kingFile-3] == 0) {
-      console.log("pra menos")
       return false
     }    
   }
@@ -217,62 +211,75 @@ function checkKingProtected() {
   return true
 }
 
-
-var config = {
-  draggable: true,
-  sparePieces: 'white',
-  dropOffBoard: 'trash',
-  onDragStart: onDragStart,
-  onDrop: onDrop
+function startBoard() {
+  var config = {
+    draggable: true,
+    sparePieces: 'white',
+    dropOffBoard: 'trash',
+    onDragStart: onDragStart,
+    onDrop: onDrop
+  }
+  board = Chessboard('myBoard', config)  
 }
-board = Chessboard('myBoard', config)
+
 
 function clickSavePositionBtn () {
   //Before we save it, let's make sure we have a king on our board
-  console.log('Current position as a FEN string:')
   var endBoard = generateFEN()
   var king = "K"
 
   //This needs to become a message on the page, not on the console
   if (endBoard.indexOf(king) !== -1) {
-    //document.getElementById("errorMessage").innerHTML = "Saved Successfully";
     console.log(endBoard)
   }
   else {
-    console.log('Missing King')
-    document.getElementById("errorMessage").innerHTML = "Missing King";
+    document.getElementById("errorMessage").innerHTML = "Missing King"
     return
   }
 
   if (checkKingProtected()) {
     document.getElementById("errorMessage").innerHTML = "Saved Successfully. Your FEN is: " + endBoard;
-    document. getElementById("protectedImage"). style. visibility = "hidden";
+    
+    console.log(localStorage.getItem('@IndiviDUALITY/FEN'))
+    console.log(localStorage.getItem('@IndiviDUALITY/Castle'))
+    
+    document. getElementById("protectedImage"). style. visibility = "hidden"
   } else {
-    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:";
-    document. getElementById("protectedImage"). style. visibility = "visible";
+    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when he cannot be checked in anycase on the initial oposition. Ie. when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:"
+    document. getElementById("protectedImage"). style. visibility = "visible"
     return
   }
 }
 
 function generateFEN() {
-  console.log(board.fen())
   var endBoard = board.fen()
+  localStorage.setItem('@IndiviDUALITY/FEN', endBoard)
   endBoard += " w "
 
+  var castle = ""
   //We can only Castle if King is in e1
   if (boardMatrix[0][4] == "K") {
     //If rookie is on File h, we can castle small
     if (boardMatrix[0][7] == "R") {
-      endBoard += "K"  
+      castle += "K"  
     }
     //If rookie is on File a, we can castle big
     if (boardMatrix[0][0] == "R") {
-      endBoard += "Q"
+      castle += "Q"
     }
   }
+
+  if (castle == "") {
+    castle = "-"
+  }
+
+  localStorage.setItem('@IndiviDUALITY/Castle', castle)
+
   return endBoard
 
 }
+
+startBoard()
 
 $('#savePos').on('click', clickSavePositionBtn)
 

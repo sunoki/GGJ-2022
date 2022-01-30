@@ -16,8 +16,8 @@ var kingRank = -1
 var kingFile = -1
 
 //Initial amounts available for each piece. This will be replaced by the actual amount of pieces, the player has
-var piecesQntd = null
-var piecesAvailable = null
+var piecesQntd = [1, 0, 2, 3, 2, 4]
+var piecesAvailable = [1, 0, 2, 3, 2, 4]
 
 //This is the beginning of the Drag. We want to make sure player can drag the piece player is trying to
 //Player cannot drag a piece not available nor more than 16 pieces
@@ -58,7 +58,6 @@ function onDragStart (source, piece, position, orientation) {
     }
 
    //we can only put 4 Pawns, 3 Bishops, 2 Knights, 1 Rookie and 1 King (for testig purposes)
-   console.log(piecesAvailable)
     if (draggingPiece == "P" & piecesAvailable[5] <= 0) {
       return false
     }
@@ -86,35 +85,44 @@ function onDragStart (source, piece, position, orientation) {
   }
 }
 
-function countPieces(pos, piece) {
+function countPieces(pos) {
   var endBoard = pos
 
-  console.log(endBoard)
+  var piece = "K"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[0] = piecesQntd[0] - count
 
-  //if (piece == "K") {
-  //  var count = 0
-  //  var re = new RegExp(piece,"g");
-  //  count = (endBoard.match(re) || []).length;
-  //  piecesAvailable[0] = piecesQntd[0] - count
-  //  console.log(count)
-  //  console.log(piecesAvailable[0])
-  //  console.log(piecesQntd[0])
-  //}
+  piece = "Q"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[1] = piecesQntd[1] - count
 
-  if (piece == "K") 
-    piecesAvailable[0] += pos
+  piece = "R"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[2] = piecesQntd[2] - count
 
-if (piece == "Q") 
-    piecesAvailable[1] += pos
-if (piece == "R") 
-    piecesAvailable[2] += pos
-if (piece == "B") 
-    piecesAvailable[3] += pos
-if (piece == "N") 
-    piecesAvailable[4] += pos
-if (piece == "P") 
-    piecesAvailable[5] += pos
+  piece = "B"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[3] = piecesQntd[3] - count 
 
+  piece = "N"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[4] = piecesQntd[4] - count
+
+  piece = "P"
+  var count = 0
+  var re = new RegExp(piece,"g");
+  count += (endBoard.match(re) || []).length;
+  piecesAvailable[5] = piecesQntd[5] - count
 
 }
 
@@ -123,7 +131,6 @@ if (piece == "P")
 function onDrop (source, target, piece, newPos, oldPos) {
   // we should put pieces only in our half of the board
   console.log(target)
-  console.log(piece)
   if (target != "offboard") {
     var rank = target.substring(1)
     var file = convertFileToInt(target.substring(0,1))
@@ -142,21 +149,11 @@ function onDrop (source, target, piece, newPos, oldPos) {
       if (rank > 4) return 'snapback'  
     }
     
-    if (boardMatrix[rank-1][file] != 0) {
-      countPieces(1, boardMatrix[rank-1][file])
-    }
     boardMatrix[rank-1][file] = droppedPiece
 
   }
   var newFen = Chessboard.objToFen(newPos)
-  console.log(newFen)
-
-  if (source == "spare" & target != "offboard")
-    countPieces(-1, piece.substring(1))
-
-  if (source != "spare" & target == "offboard")
-    countPieces(1, piece.substring(1))
-  
+  countPieces(newFen)
   board.piecesAmount(piecesAvailable)
 }
 
@@ -186,17 +183,20 @@ function checkKingProtected() {
   console.log(boardMatrix)
 
   if (boardMatrix[kingRank+1][kingFile] == 0 & boardMatrix[kingRank+2][kingFile] == 0 & boardMatrix[kingRank+3][kingFile] == 0) {
+    console.log("pra frente")
     return false
   }
 
   if (kingFile <= 3) {
     if (boardMatrix[kingRank+1][kingFile+1] == 0 & boardMatrix[kingRank+2][kingFile+2] == 0 & boardMatrix[kingRank+3][kingFile+3] == 0) {
+      console.log("pra mais")
       return false    
     }
   }
 
   if (kingFile >= 4) {
     if (boardMatrix[kingRank+1][kingFile-1] == 0 & boardMatrix[kingRank+2][kingFile-2] == 0 & boardMatrix[kingRank+3][kingFile-3] == 0) {
+      console.log("pra menos")
       return false
     }    
   }
@@ -208,67 +208,55 @@ function checkKingProtected() {
 
 function clickSavePositionBtn () {
   //Before we save it, let's make sure we have a king on our board
+  console.log('Current position as a FEN string:')
   var endBoard = generateFEN()
   var king = "K"
 
   //This needs to become a message on the page, not on the console
   if (endBoard.indexOf(king) !== -1) {
+    //document.getElementById("errorMessage").innerHTML = "Saved Successfully";
     console.log(endBoard)
   }
   else {
-    document.getElementById("errorMessage").innerHTML = "Missing King"
+    console.log('Missing King')
+    document.getElementById("errorMessage").innerHTML = "Missing King";
     return
   }
 
   if (checkKingProtected()) {
     document.getElementById("errorMessage").innerHTML = "Saved Successfully. Your FEN is: " + endBoard;
-    
-    console.log(localStorage.getItem('@IndiviDUALITY/FEN'))
-    console.log(localStorage.getItem('@IndiviDUALITY/Castle'))
-    
-    document. getElementById("protectedImage"). style. visibility = "hidden"
+    document. getElementById("protectedImage"). style. visibility = "hidden";
   } else {
-    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when he cannot be checked in anycase on the initial oposition. Ie. when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:"
-    document. getElementById("protectedImage"). style. visibility = "visible"
+    document.getElementById("errorMessage").innerHTML = "Your King is unprotected. A king is protected when a square in front of him and any of the squares on his diagonals are occupied by allied pieces. See examples below:";
+    document. getElementById("protectedImage"). style. visibility = "visible";
     return
   }
 }
 
 function generateFEN() {
+  console.log(board.fen())
   var endBoard = board.fen()
-  localStorage.setItem('@IndiviDUALITY/FEN', endBoard)
   endBoard += " w "
 
-  var castle = ""
   //We can only Castle if King is in e1
   if (boardMatrix[0][4] == "K") {
     //If rookie is on File h, we can castle small
     if (boardMatrix[0][7] == "R") {
-      castle += "K"  
+      endBoard += "K"  
     }
     //If rookie is on File a, we can castle big
     if (boardMatrix[0][0] == "R") {
-      castle += "Q"
+      endBoard += "Q"
     }
   }
-
-
-
-  localStorage.setItem('@IndiviDUALITY/Castle', castle)
-
   return endBoard
 
 }
 
-$(document).ready(function(){
-  console.log('Ready disparado');
-  var setup = document.getElementById('board')
-    console.log(setup);
-});
 
-
-function initBoard () {
-   var config = {
+$(document).ready(function() {
+  $('#createBoard').on('click', function () {
+    var config = {
       draggable: true,
       sparePieces: 'white',
       dropOffBoard: 'trash',
@@ -276,20 +264,29 @@ function initBoard () {
       onDrop: onDrop
     }
 
-    console.log("initBoard")
-    var piecesQntdStr = localStorage.getItem('@IndiviDUALITY/piecesQntd');
-    piecesQntd = piecesQntdStr.split(",").map(Number)
-    console.log(piecesQntd)
-    piecesAvailable = piecesQntd
-    console.log(piecesAvailable)
-    board = Chessboard('board', config)
+    board = Chessboard('myBoard', config)
 
-    board.piecesAmount(piecesAvailable)
-}
+    console.log("aaaaaaaaaaaaaaa");
+  });
+});
 
-  
 
 $('#savePos').on('click', clickSavePositionBtn)
+$('#createBoard').on('click', function () {
+  var config = {
+    draggable: true,
+    sparePieces: 'white',
+    dropOffBoard: 'trash',
+    onDragStart: onDragStart,
+    onDrop: onDrop
+  }
+
+  board = Chessboard('myBoard', config)
+
+  console.log("aaaaaaaaaaaaaaa");
+});
+
+
 $('#clrBoard').on('click', function () {
 
   board.clear(false)
